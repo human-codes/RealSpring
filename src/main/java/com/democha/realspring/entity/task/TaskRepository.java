@@ -1,6 +1,5 @@
-package com.democha.realspring.entity;
+package com.democha.realspring.entity.task;
 
-import com.democha.realspring.entity.task.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,10 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Details</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .details-card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .details-header {
+            text-align: center;
+            color: #5c6bc0;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .details-info {
+            margin-bottom: 20px;
+        }
+        .details-info label {
+            font-weight: bold;
+            color: #333;
+        }
+        .details-info span {
+            color: #666;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-primary {
+            background-color: #5c6bc0;
+            border-color: #5c6bc0;
+        }
+        .btn-primary:hover {
+            background-color: #3f51b5;
+            border-color: #3f51b5;
+        }
+        .btn-danger {
+            background-color: #e57373;
+            border-color: #e57373;
+        }
+        .btn-danger:hover {
+            background-color: #d32f2f;
+            border-color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
-$END$
+<div class="container">
+    <div class="details-card">
+        <h2 class="details-header">Task Details</h2>
+        <div class="details-info">
+            <label>Title:</label> <span th:text="${task.title}"></span><br>
+            <label>Description:</label> <span th:text="${task.description}"></span><br>
+            <label>Priority:</label> <span th:text="${task.priority}"></span><br>
+            <label>Status:</label> <span th:text="${task.status}"></span><br>
+            <label>Created Date:</label> <span th:text="${task.createdDate}"></span><br>
+            <label>Start Time:</label> <span th:text="${task.startTime}"></span><br>
+            <label>End Time:</label> <span th:text="${task.endTime}"></span><br>
+            <label>Deadline:</label> <span th:text="${task.deadline}"></span><br>
+        </div>
+        <div class="action-buttons">
+            <form  action="/task/delete" method="post">
+                <input type="hidden" name="id" th:value="${task.id}">
+                <button class="btn btn-danger">Delete the task</button>
+            </form>
+            <a href="/task/getTasks" class="btn btn-primary">Go Back</a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

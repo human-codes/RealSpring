@@ -1,12 +1,9 @@
-package com.democha.realspring.entity;
+package com.democha.realspring.entity.task;
 
 import com.democha.realspring.entity.student.Student;
 import com.democha.realspring.entity.student.StudentRepository;
-import com.democha.realspring.entity.task.Task;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,18 +26,19 @@ public class TaskController {
 
     @GetMapping("/getTasks")
     public String getTasks(Model model, HttpServletRequest request) {
-        System.out.println("salom");
-        Student student = (Student) request.getSession().getAttribute("currentStudent");
+
+        Student student = (Student)(request.getSession().getAttribute("currentStudent"));
+        if (student == null) {
+            System.out.println("student id is null");
+            return "redirect:/login";
+        }
         Optional<Student> byId = studentRepository.findById(student.getId());
         Student student1 = byId.get();
-        System.out.println(student1.getUsername());
         List<Task> all = taskRepository.findAll();
         List<Task> tasks = all.stream()
                 .filter(task -> task.getStudent().getId().equals(student1.getId())).collect(Collectors.toList());
         model.addAttribute("tasks", tasks);
-        for (Task task : tasks) {
-            System.out.println(task);
-        }
+
         return "/home";
     }
 
@@ -57,11 +55,11 @@ public class TaskController {
         Student student=(Student)request.getSession().getAttribute("currentStudent");
         Optional<Student> byId = studentRepository.findById(student.getId());
         Student student1 = byId.get();
-        System.out.println(student1.getUsername());
+
         if (deadline.isBefore(LocalDateTime.now())) {
             return "redirect:/task/new-task";
         }
-        System.out.println(student1.getUsername());
+
         Task task = new Task();
         task.setTitle(title);
         task.setDescription(description);
@@ -98,4 +96,20 @@ public class TaskController {
     public String newTask() {
         return "newTask";
     }
+
+    @GetMapping("/details/{id}")
+    public String getTaskDetails(@PathVariable Long id, Model model) {
+        Optional<Task> task = taskRepository.findById(id);
+        model.addAttribute("task", task.get());
+        return "taskDetail";
+    }
+
+
+
+    @PostMapping("/delete")
+    public String deleteTask(@RequestParam(name = "id") Long id) {
+        taskRepository.deleteById(id);
+        return "redirect:/task/getTasks";
+    }
+
 }

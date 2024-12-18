@@ -2,9 +2,7 @@ package com.democha.realspring.entity.task;
 
 import com.democha.realspring.entity.student.Student;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

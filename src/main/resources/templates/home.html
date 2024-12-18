@@ -26,11 +26,10 @@
             padding: 20px;
             background-color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            height: 500px; /* Adjust height as needed */
-            overflow-y: auto; /* Enable vertical scrolling */
+            height: 500px;
+            overflow-y: auto;
         }
         .task-item {
-            background-color: #e9eef5;
             border: 1px solid #ccc;
             border-radius: 10px;
             padding: 15px;
@@ -57,11 +56,11 @@
         .task-item a {
             flex-grow: 1;
             margin-right: 10px;
-            text-decoration: none; /* Remove underline */
+            text-decoration: none;
             color: #333;
         }
         .task-item a:hover {
-            color: #5c6bc0; /* Hover color */
+            color: #5c6bc0;
         }
         .action-buttons {
             display: flex;
@@ -98,50 +97,62 @@
 <body>
 <div class="container">
     <div class="text-right">
-        <button class="btn btn-primary">Log out</button>
+        <form action="/logout" method="post">
+            <button class="btn btn-primary">Log out</button>
+        </form>
     </div>
     <div class="task-board">
+        <!-- NEW -->
         <div class="task-column">
             <h3 class="task-header">NEW</h3>
-            <div class="task-item">
-                <a href="taskInfo.html">Task 1</a>
+            <div th:each="task : ${tasks}" th:if="${task.status} == 'NEW'" class="task-item"
+                 th:style="|
+                     ${task.priority == 'Low' ? 'background-color: #ffebee;' : ''}
+                     ${task.priority == 'Medium' ? 'background-color: #ffcdd2;' : ''}
+                     ${task.priority == 'High' ? 'background-color: #f44336;' : ''}|">
+                <a th:href="@{/task/details/{id}(id=${task.id})}" th:text="${task.title}"></a>
                 <div class="task-actions">
-                    <button class="btn btn-light btn-sm">→</button>
-                </div>
-            </div>
-            <div class="task-item">
-                <a href="taskInfo.html">Task 2</a>
-                <div class="task-actions">
-                    <button class="btn btn-light btn-sm">→</button>
-                </div>
-            </div>
-            <div class="task-item">
-                <a href="taskInfo.html">Task 3</a>
-                <div class="task-actions">
-                    <button class="btn btn-light btn-sm">→</button>
+                    <form action="/task/moveTask" method="post">
+                        <input type="hidden" name="id" th:value="${task.id}">
+                        <button class="btn btn-light btn-sm">→</button>
+                    </form>
                 </div>
             </div>
         </div>
+
+        <!-- IN PROGRESS -->
         <div class="task-column">
             <h3 class="task-header">IN PROGRESS</h3>
-            <div class="task-item">
-                <a href="taskInfo.html">Task 4</a>
+            <div th:each="task : ${tasks}" th:if="${task.status} == 'INPROGRESS'" class="task-item"
+                 th:style="|
+                     ${task.priority == 'Low' ? 'background-color: #ffebee;' : ''}
+                     ${task.priority == 'Medium' ? 'background-color: #ffcdd2;' : ''}
+                     ${task.priority == 'High' ? 'background-color: #f44336;' : ''}|">
+                <a th:href="@{/task/details/{id}(id=${task.id})}" th:text="${task.title}"></a>
                 <div class="task-actions">
-                    <button class="btn btn-light btn-sm">→</button>
+                    <form action="/task/moveTask" method="post">
+                        <input type="hidden" name="id" th:value="${task.id}">
+                        <button class="btn btn-light btn-sm">→</button>
+                    </form>
                 </div>
             </div>
         </div>
+
+        <!-- COMPLETED -->
         <div class="task-column">
             <h3 class="task-header">COMPLETED</h3>
-            <div class="task-item">
-                <a href="taskInfo.html">Task 5</a>
+            <div th:each="task : ${tasks}" th:if="${task.status} == 'COMPLETED'" class="task-item"
+                 th:style="|
+                     ${task.priority == 'Low' ? 'background-color: #ffebee;' : ''}
+                     ${task.priority == 'Medium' ? 'background-color: #ffcdd2;' : ''}
+                     ${task.priority == 'High' ? 'background-color: #f44336;' : ''}|">
+                <a th:href="@{/task/details/{id}(id=${task.id})}" th:text="${task.title}"></a>
             </div>
         </div>
     </div>
 
     <div class="action-buttons">
-        <button class="btn btn-success">Add Task</button>
-        <button class="btn btn-info">Report</button>
+        <a href="/task/new-task" class="btn btn-success">Add Task</a>
     </div>
 </div>
 </body>
